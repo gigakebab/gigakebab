@@ -11,7 +11,7 @@ class AdressController extends AbstractController
     #[Route('/adress', name: 'app_adress')]
     public function index(): Response
     {
-        return $this->render('adress/index.html.twig', [
+        return $this->render('adress/show.html.twig', [
             'controller_name' => 'AdressController',
         ]);
     }
