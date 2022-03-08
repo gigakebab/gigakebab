@@ -8,8 +8,10 @@
 
     <h2>Vos adresses existantes :</h2>
 
-    {% for address in app.user.addresses %}
-        <a href="#"><h3>{{ adress.name }}</h3></a>
+    {% for address in addresses %}
+        <a href="#"><h3>{{ address.address }}</h3></a>
     {% endfor %}
+
+    {{ form(form) }}
 
 {% endblock %}

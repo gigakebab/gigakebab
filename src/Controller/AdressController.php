@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Address;
 use App\Form\AdressType;
-use App\Repository\UserRepository;
+use App\Repository\AddressRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,32 +21,30 @@ class AdressController extends AbstractController
         ]);
     }
 
-    #[Route('/address/add', name: 'app_adress_add')]
-    public function add(Request $request, EntityManagerInterface $em, UserRepository $userRepo): Response
+    #[Route('/adress/add', name: 'app_adress_add')]
+    public function add(Request $request, EntityManagerInterface $em, AddressRepository $addressRepository): Response
     {
-        $addresses = $userRepo->getAddresses();
-
         $address = new Address();
 
         $form = $this->createForm(AdressType::class, $address)->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){
-            $address = $form->getData();
-
+            $address->setUser($this->getUser());
             $em->persist($address);
 
             $em->flush();
 
             $this->addFlash(
                 'success',
-                'L\'adresse' . $address . 'a bien été ajoutée.'
+                'L\'adresse' . $address->getName() . 'a bien été ajoutée.'
             );
 
             return $this->redirectToRoute("app_home");
         }
 
-        return $this->render('address/add.html.twig', [
-            "addresses" => $addresses,
+        return $this->renderForm('adress/add.html.twig', [
+            "addresses" => $addressRepository->findBy(['user' => $this->getUser()]),
+            "form" => $form
         ]);
     }
 }
