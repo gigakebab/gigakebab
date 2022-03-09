@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Panier!{% endblock %}
+
+{% block body %}
+    <h1>Votre panier</h1>
+    {% for product in app.session.get('cart') %}
+        <h2>{{ product.name }}</h2>
+        <h4>{{ product.price }}</h4>
+        <p><a href="{{ path("app_erase", {id:product.id}) }}">Supprimer du panier</a></p>
+    {% endfor %}
+
+    <p>Prix total : {{ totalPrice }}</p>
+{% endblock %}

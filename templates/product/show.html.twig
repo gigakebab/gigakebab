@@ -5,6 +5,6 @@
 {% block body %}
     {% for product in products  %}
         <p><a href="{{ path('product_details',{id:product.id}) }}">{{ product.name }} : {{ product.price }}</a></p>
-        <p><button>Ajouter au panier</button></p>
+        <p><a href="{{ path("app_buy", {id:product.id}) }}">Ajouter au panier</a></p>
     {% endfor %}
 {% endblock %}
