@@ -5,10 +5,15 @@
 {% block body %}
     <h1>Votre panier</h1>
     {% for product in products %}
-        <h2>{{ product.name }}</h2>
-        <h4>{{ product.price }}</h4>
-        <p><a href="{{ path("app_erase", {id:product.id}) }}">Supprimer du panier</a></p>
+        <h2>{{ product.product.name }}</h2>
+        <h4>{{ product.product.price * product.quantity}}</h4>
+        <h4>{{ product.quantity}}</h4>
+        <p><a href="{{ path("app_buy", {id:product.product.id}) }}">+</a></p>
+        <p><a href="{{ path("app_substract", {id:product.product.id}) }}">-</a></p>
+        <p><a href="{{ path("app_erase", {id:product.product.id}) }}">Supprimer du panier</a></p>
     {% endfor %}
 
     <p>Prix total : {{ totalPrice }}</p>
+
+    <a href="{{ path('deleteAll') }}">Vider le panier</a>
 {% endblock %}

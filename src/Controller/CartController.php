@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Product;
 use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,11 +19,10 @@ class CartController extends AbstractController
         $products = [];
 
         if ($session->get('cart')){
-            foreach ($session->get('cart') as $productId){
-                $product = $repo->find($productId);
+            foreach ($session->get('cart') as $productId => $quantity){
+                $product = ["product" => $repo->find($productId), 'quantity' => $quantity];
                 $products[] = $product;
-
-                $totalPrice += $product->getPrice();
+                $totalPrice += $product['product']->getPrice() * $quantity;
             }
         }
 
@@ -33,27 +33,34 @@ class CartController extends AbstractController
     }
 
     #[Route('/buy/{id}', name: 'app_buy')]
-    public function buy(Product $product, SessionInterface $session, ProductRepository $repo): Response
+    public function buy(Product $product, SessionInterface $session, Request $request): Response
     {
         $cart = $session->get("cart");
-//        dd($cart);
-//        $cart[$product->getId()] ? $cart[$product->getId()] += 1 : $cart[$product->getId()] = 1;
-        //$cart[$product->getId()] += 1;
+        $quantity = 1;
 
-        foreach ($cart as $id => $quantity){
-            $result = $repo->find($id);
-            if(!$result){
 
-            }
-        }
+
+        !$cart ||!array_key_exists($product->getId(), $cart) ? $cart[$product->getId()] = 1 : $cart[$product->getId()] += 1 ;
+
 
         $session->set("cart", $cart);
+        return $this->redirect($request->headers->get('referer'));
+    }
 
-        return $this->redirectToRoute('product_show', []);
+    #[Route('/substract/{id}', name: 'app_substract')]
+    public function substract(Product $product, SessionInterface $session, Request $request): Response
+    {
+        $cart = $session->get("cart");
+        array_key_exists($product->getId(), $cart) && $cart[$product->getId()] -= 1 ;
+
+        if($cart[$product->getId()] === 0) unset($cart[$product->getId()]);
+
+        $session->set("cart", $cart);
+        return $this->redirect($request->headers->get('referer'));
     }
 
     #[Route('/erase/{id}', name: 'app_erase')]
-    public function erase(ProductRepository $repo, Product $product, SessionInterface $session): Response
+    public function erase(Product $product, SessionInterface $session): Response
     {
         $sessionCart = $session->get("cart");
 
@@ -63,8 +70,13 @@ class CartController extends AbstractController
 
         $session->set("cart", $cart);
 
-        return $this->redirectToRoute('app_cart', [
-            'products' => $repo->findAll()
-        ]);
+        return $this->redirectToRoute('app_cart');
+    }
+
+    #[Route('/deleteAll', name: 'deleteAll')]
+    public function deleteAll(SessionInterface $session):Response {
+        $session->remove('cart');
+
+        return $this->redirectToRoute('app_cart');
     }
   }
