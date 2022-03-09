@@ -19,7 +19,7 @@ class AppFixtures extends Fixture
         UserFactory::createMany(50);
 
         ProductFactory::createOne(["name" => "Le Classique", "description" => "Toi même tu sais", "price" => 4.99]);
-        ProductFactory::createOne(["name" => "Le Giaga Tim", "description" => "Kebab couscous bien mouillé supplément pois chiche", "price" => 4.99]);
+        ProductFactory::createOne(["name" => "Le Giga Tim", "description" => "Kebab couscous bien mouillé supplément pois chiche", "price" => 4.99]);
         ProductFactory::createOne(["name" => "La Gigadoline", "description" => "Le classique avec deux tomates et une merguez", "price" => 4.99]);
         ProductFactory::createOne(["name" => "La galette d'Alexandre", "description" => "Le classique dans sa galette maison avec sa sauce blanche crémeuse", "price" => 4.99]);
         ProductFactory::createOne(["name" => "L'assiette gourmande", "description" => "L'assiette avec Giga saussice pour les Giga gourmands", "price" => 4.99]);
