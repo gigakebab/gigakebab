@@ -4,7 +4,7 @@
 
 {% block body %}
     <h1>Votre panier</h1>
-    {% for product in app.session.get('cart') %}
+    {% for product in products %}
         <h2>{{ product.name }}</h2>
         <h4>{{ product.price }}</h4>
         <p><a href="{{ path("app_erase", {id:product.id}) }}">Supprimer du panier</a></p>

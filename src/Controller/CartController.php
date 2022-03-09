@@ -12,33 +12,44 @@ use Symfony\Component\Routing\Annotation\Route;
 class CartController extends AbstractController
 {
     #[Route('/cart', name: 'app_cart')]
-    public function index(SessionInterface $session): Response
+    public function index(SessionInterface $session, ProductRepository $repo): Response
     {
         $totalPrice = 0;
+        $products = [];
 
         if ($session->get('cart')){
-            foreach ($session->get('cart') as $product){
+            foreach ($session->get('cart') as $productId){
+                $product = $repo->find($productId);
+                $products[] = $product;
+
                 $totalPrice += $product->getPrice();
             }
         }
 
         return $this->render('cart/index.html.twig', [
+            'products' => $products,
             'totalPrice' => $totalPrice,
         ]);
     }
 
     #[Route('/buy/{id}', name: 'app_buy')]
-    public function buy(Product $product, SessionInterface $session): Response
+    public function buy(Product $product, SessionInterface $session, ProductRepository $repo): Response
     {
         $cart = $session->get("cart");
+//        dd($cart);
+//        $cart[$product->getId()] ? $cart[$product->getId()] += 1 : $cart[$product->getId()] = 1;
+        //$cart[$product->getId()] += 1;
 
-        $cart[] = $product;
+        foreach ($cart as $id => $quantity){
+            $result = $repo->find($id);
+            if(!$result){
+
+            }
+        }
 
         $session->set("cart", $cart);
 
-        return $this->redirectToRoute('product_show', [
-
-        ]);
+        return $this->redirectToRoute('product_show', []);
     }
 
     #[Route('/erase/{id}', name: 'app_erase')]
@@ -56,4 +67,4 @@ class CartController extends AbstractController
             'products' => $repo->findAll()
         ]);
     }
-}
+  }
