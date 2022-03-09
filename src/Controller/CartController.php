@@ -38,13 +38,11 @@ class CartController extends AbstractController
         $cart = $session->get("cart");
         $quantity = 1;
 
-
-
         !$cart ||!array_key_exists($product->getId(), $cart) ? $cart[$product->getId()] = 1 : $cart[$product->getId()] += 1 ;
 
 
         $session->set("cart", $cart);
-        return $this->redirect($request->headers->get('referer'));
+        return $this->json($cart, 200);
     }
 
     #[Route('/substract/{id}', name: 'app_substract')]
@@ -56,7 +54,7 @@ class CartController extends AbstractController
         if($cart[$product->getId()] === 0) unset($cart[$product->getId()]);
 
         $session->set("cart", $cart);
-        return $this->redirect($request->headers->get('referer'));
+        return $this->json($cart, 200);
     }
 
     #[Route('/erase/{id}', name: 'app_erase')]

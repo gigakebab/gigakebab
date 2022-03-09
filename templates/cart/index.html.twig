@@ -7,9 +7,10 @@
     {% for product in products %}
         <h2>{{ product.product.name }}</h2>
         <h4>{{ product.product.price * product.quantity}}</h4>
-        <h4>{{ product.quantity}}</h4>
-        <p><a href="{{ path("app_buy", {id:product.product.id}) }}">+</a></p>
-        <p><a href="{{ path("app_substract", {id:product.product.id}) }}">-</a></p>
+        <h4 class="quantityProduct" data-id-quantity="{{ product.product.id }}">{{ product.quantity}}</h4>
+{#        <p><a id="addProduct" href="{{ path("app_buy", {id:product.product.id}) }}">+</a></p>#}
+        <p class="addProduct" data-id="{{ product.product.id }}">+</p>
+        <p class="substractProduct" data-id="{{ product.product.id }}">-</p>
         <p><a href="{{ path("app_erase", {id:product.product.id}) }}">Supprimer du panier</a></p>
     {% endfor %}
 
@@ -17,3 +18,38 @@
 
     <a href="{{ path('deleteAll') }}">Vider le panier</a>
 {% endblock %}
+
+{% block javascripts %}
+    <script>
+        window.onload = () => {
+            const add = document.querySelectorAll('.addProduct');
+            const substract = document.querySelectorAll('.substractProduct');
+
+            const modifyQuantity = async (url, block, element) => {
+                const Url = new URL(window.location.href);
+                const api = await fetch(`${Url.origin}/${url}/${element.dataset.id}`, {
+                    headers: {
+                        "X-Requested-With" : "XMLHttpRequest"
+                    }
+                });
+                const quantities = await api.json();
+                document.querySelector(`[data-id-quantity="${element.dataset.id}"]`).innerHTML = quantities[element.dataset.id];
+            }
+
+            add.forEach((element) => {
+                element.addEventListener("click", async (e) => {
+                    e.preventDefault();
+                    await modifyQuantity("buy", add, element);
+                });
+            });
+
+
+            substract.forEach((element) => {
+                element.addEventListener("click", async (e) => {
+                    e.preventDefault();
+                    await modifyQuantity("substract", substract, element);
+                });
+            });
+        }
+    </script>
+{% endblock  %}
