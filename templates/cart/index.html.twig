@@ -19,6 +19,8 @@
     <p>Prix total : {{ totalPrice }}</p>
 
     <a href="{{ path('deleteAll') }}">Vider le panier</a>
+
+    <a href="{{ path("app_create") }}">Commander</a>
 {% endblock %}
 
 {% block javascripts %}
@@ -40,7 +42,6 @@
                 document.querySelector(`[data-id-quantity="${element.dataset.id}"]`).innerHTML = quantities[element.dataset.id];
                 blockPrice.innerHTML = (parseInt(quantities[element.dataset.id]) * parseFloat(blockPrice.dataset.price)).toFixed(2);
                 if(quantities[element.dataset.id] === undefined) document.querySelector(`[data-id-block-product="${element.dataset.id}"]`).innerHTML = '';
-
             }
 
             add.forEach((element) => {

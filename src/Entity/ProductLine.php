@@ -19,19 +19,15 @@ class ProductLine
     #[ORM\JoinColumn(nullable: false)]
     private $product;
 
-    #[ORM\ManyToMany(targetEntity: Order::class, inversedBy: 'productLines')]
-    private $orderDetail;
-
     #[ORM\Column(type: 'float')]
     private $price;
 
     #[ORM\Column(type: 'integer')]
     private $quantity;
 
-    public function __construct()
-    {
-        $this->orderDetail = new ArrayCollection();
-    }
+    #[ORM\ManyToOne(targetEntity: Order::class, inversedBy: 'product_line')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $order_product;
 
     public function getId(): ?int
     {
@@ -46,30 +42,6 @@ class ProductLine
     public function setProduct(?Product $product): self
     {
         $this->product = $product;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Order>
-     */
-    public function getOrderDetail(): Collection
-    {
-        return $this->orderDetail;
-    }
-
-    public function addOrderDetail(Order $orderDetail): self
-    {
-        if (!$this->orderDetail->contains($orderDetail)) {
-            $this->orderDetail[] = $orderDetail;
-        }
-
-        return $this;
-    }
-
-    public function removeOrderDetail(Order $orderDetail): self
-    {
-        $this->orderDetail->removeElement($orderDetail);
 
         return $this;
     }
@@ -94,6 +66,18 @@ class ProductLine
     public function setQuantity(int $quantity): self
     {
         $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    public function getOrderProduct(): ?Order
+    {
+        return $this->order_product;
+    }
+
+    public function setOrderProduct(?Order $order_product): self
+    {
+        $this->order_product = $order_product;
 
         return $this;
     }

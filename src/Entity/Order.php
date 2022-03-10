@@ -36,12 +36,12 @@ class Order
     #[ORM\JoinColumn(nullable: false)]
     private $address;
 
-    #[ORM\ManyToMany(targetEntity: ProductLine::class, mappedBy: 'orderDetail')]
-    private $productLines;
+    #[ORM\OneToMany(mappedBy: 'order_product', targetEntity: ProductLine::class)]
+    private $product_line;
 
     public function __construct()
     {
-        $this->productLines = new ArrayCollection();
+        $this->product_line = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -124,16 +124,16 @@ class Order
     /**
      * @return Collection<int, ProductLine>
      */
-    public function getProductLines(): Collection
+    public function getProductLine(): Collection
     {
-        return $this->productLines;
+        return $this->product_line;
     }
 
     public function addProductLine(ProductLine $productLine): self
     {
-        if (!$this->productLines->contains($productLine)) {
-            $this->productLines[] = $productLine;
-            $productLine->addOrderDetail($this);
+        if (!$this->product_line->contains($productLine)) {
+            $this->product_line[] = $productLine;
+            $productLine->setOrderProduct($this);
         }
 
         return $this;
@@ -141,8 +141,11 @@ class Order
 
     public function removeProductLine(ProductLine $productLine): self
     {
-        if ($this->productLines->removeElement($productLine)) {
-            $productLine->removeOrderDetail($this);
+        if ($this->product_line->removeElement($productLine)) {
+            // set the owning side to null (unless already changed)
+            if ($productLine->getOrderProduct() === $this) {
+                $productLine->setOrderProduct(null);
+            }
         }
 
         return $this;
