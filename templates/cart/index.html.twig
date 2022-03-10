@@ -1,25 +1,36 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Panier!{% endblock %}
 
 {% block body %}
-    <h1>Votre panier</h1>
+<div class="container">
+    <h1 class="title">Votre panier</h1>
     {% for product in products %}
-        <div data-id-block-product="{{ product.product.id }}">
-            <h2>{{ product.product.name }}</h2>
+        <div class="container-h"data-id-block-product="{{ product.product.id }}">
+            <h2 class="title-basket">{{ product.product.name }}</h2>
             <h4 data-id-price="{{ product.product.id }}" data-price="{{ product.product.price }}">{{ product.product.price * product.quantity}}</h4>
-            <h4 class="quantityProduct" data-id-quantity="{{ product.product.id }}">{{ product.quantity}}</h4>
+            
             {#        <p><a id="addProduct" href="{{ path("app_buy", {id:product.product.id}) }}">+</a></p>#}
-            <p class="addProduct" data-id="{{ product.product.id }}">+</p>
-            <p class="substractProduct" data-id="{{ product.product.id }}">-</p>
-            <p><a href="{{ path("app_erase", {id:product.product.id}) }}">Supprimer du panier</a></p>
+            <p class="addProduct" data-id="{{ product.product.id }}"><svg class="svg-card" height="20px" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
+                </svg></p>
+            <h4 class="quantityProduct" data-id-quantity="{{ product.product.id }}">{{ product.quantity}}</h4>
+            <p class="substractProduct" data-id="{{ product.product.id }}"><svg class="svg-card" height="20px" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 000 2h6a1 1 0 100-2H7z" clip-rule="evenodd" />
+                </svg></p>
+            <p><a href="{{ path("app_erase", {id:product.product.id}) }}">
+            <svg class="svg-card" height="20px" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+            </svg></a></p>
         </div>
+        <div class="line-yellow"></div>
     {% endfor %}
 
-    <p>Prix total : {{ totalPrice }}</p>
+    <p class="total">Prix total : {{ totalPrice }}</p>
 
-    <a href="{{ path('deleteAll') }}">Vider le panier</a>
+    <a class="btn" href="{{ path('deleteAll') }}">Vider le panier</a>
+    </div>
 {% endblock %}
+
 
 {% block javascripts %}
     <script>

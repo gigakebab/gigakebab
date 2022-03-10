@@ -13,13 +13,26 @@
   border: 1px solid $color-darkGrey;
 }
 .btn-connexion {
+  text-decoration: none;
   border-radius: 30px;
   padding: 15px;
   width: 180px;
   background-color: $color-white;
   border: 1px solid $color-secondary;
+  text-align: center;
+  color: $color-primary;
+  font-weight: bold;
+  font-size: 15px;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  cursor: pointer;
   &:hover {
-    background-color: $color-secondary;
-    border: none;
+    background-color: $color-primary;
+    border: $color-secondary;
+    color: $color-white;
   }
+}
+.signIn {
+  font-weight: bold;
+  padding: 0;
+  margin: 0;
 }
