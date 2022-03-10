@@ -13,9 +13,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
+#[Route('/order', name: 'order_')]
 class OrderController extends AbstractController
 {
-    #[Route('/order', name: 'app_create')]
+    #[Route('/create', name: 'app_create')]
     public function create(SessionInterface $session, ProductRepository $repo, UserRepository $userRepo, EntityManagerInterface $manager): Response
     {
         $cart = $session->get("cart");
@@ -46,10 +47,19 @@ class OrderController extends AbstractController
         $order->setPrice($totalPrice);
         $manager->persist($order);
 
-//        $manager->flush();
+        $manager->flush();
 
+        return $this->redirectToRoute('order_validate', [
+            "order" => $order->getId()
+        ]);
+    }
+
+
+    #[Route('/validate/{order}', name: 'validate')]
+    public function validate(Order $order): Response
+    {
         return $this->render('order/index.html.twig', [
-            "order" => $order
+            'order' => $order
         ]);
     }
 }

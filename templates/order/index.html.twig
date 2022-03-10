@@ -6,12 +6,13 @@
 
     <h1>Details de la commande :</h1>
 
-    {{ order.user.name }}
-    {{ order.price }}
-    {{ order.status }}
+    <h3>Prix : {{ order.price }}</h3>
 
-    {{ dump(order) }}
-    {% for line in order.productLine %}
-        {{ line.product.name }}
-    {% endfor %}
+    <ul>
+        {% for line in order.productLine %}
+            <li>{{ line.product.name }} x {{ line.quantity }} : {{ line.price }} €</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{{ path("app_home") }}">Retour à l'accueil</a>
 {% endblock %}
