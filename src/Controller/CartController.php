@@ -38,8 +38,6 @@ class CartController extends AbstractController
         $cart = $session->get("cart");
 
         !$cart ||!array_key_exists($product->getId(), $cart) ? $cart[$product->getId()] = 1 : $cart[$product->getId()] += 1 ;
-
-
         $session->set("cart", $cart);
         return $this->json($cart, 200);
     }
