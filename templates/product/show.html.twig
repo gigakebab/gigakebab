@@ -1,10 +1,13 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}Hello ProductController!{% endblock %}
-
-{% block body %}
-    {% for product in products  %}
-        <p><a href="{{ path('product_details',{id:product.id}) }}">{{ product.name }} : {{ product.price }}</a></p>
-        <p><a href="{{ path("app_buy", {id:product.id}) }}">Ajouter au panier</a></p>
-    {% endfor %}
-{% endblock %}
+ 
+ <div class="container">
+    <h4 class="title">Nos Produits Stars</h4>
+    <div class="container-h">
+        {% for product in products  %}
+            <div class="image-card">
+                <p><a href="{{ path('product_details',{id:product.id}) }}">{{ product.name }} : {{ product.price }}</a></p>
+                <p><a href="{{ path("app_buy", {id:product.id}) }}">Ajouter au panier</a></p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+ 
