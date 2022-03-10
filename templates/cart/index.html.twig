@@ -1,83 +1,99 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Panier!{% endblock %}
 
 {% block body %}
 <div class="container">
     <h1 class="title">Votre panier</h1>
     {% for product in products %}
-        <div class="container-h"data-id-block-product="{{ product.product.id }}">
+        <div class="container-h" data-id-block-product="{{ product.product.id }}">
             <h2 class="title-basket">{{ product.product.name }}</h2>
-            <h4 data-id-price="{{ product.product.id }}" data-price="{{ product.product.price }}">{{ product.product.price * product.quantity}}</h4>
-            
-            {#        <p><a id="addProduct" href="{{ path("app_buy", {id:product.product.id}) }}">+</a></p>#}
-            <p class="addProduct" data-id="{{ product.product.id }}"><svg class="svg-card" height="20px" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
-                </svg></p>
-            <h4 class="quantityProduct" data-id-quantity="{{ product.product.id }}">{{ product.quantity}}</h4>
-            <p class="substractProduct" data-id="{{ product.product.id }}"><svg class="svg-card" height="20px" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 000 2h6a1 1 0 100-2H7z" clip-rule="evenodd" />
-                </svg></p>
+            <h4 data-id-price="{{ product.product.id }}"
+                data-price="{{ product.product.price }}">{{ product.product.price * product.quantity }}</h4>
+
+            {#        <p><a id="addProduct" href="{{ path("app_buy", {id:product.product.id}) }}">+</a></p> #}
+            <p class="addProduct" data-id="{{ product.product.id }}">
+                <svg class="svg-card" height="20px" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
+                     viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+                          clip-rule="evenodd"/>
+                </svg>
+            </p>
+            <h4 class="quantityProduct" data-id-quantity="{{ product.product.id }}">{{ product.quantity }}</h4>
+            <p class="substractProduct" data-id="{{ product.product.id }}">
+                <svg class="svg-card" height="20px" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
+                     viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 000 2h6a1 1 0 100-2H7z"
+                          clip-rule="evenodd"/>
+                </svg>
+            </p>
             <p><a href="{{ path("app_erase", {id:product.product.id}) }}">
-            <svg class="svg-card" height="20px" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-            </svg></a></p>
+                    <svg class="svg-card" height="20px" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
+                         viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd"
+                              d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                              clip-rule="evenodd"/>
+                    </svg>
+                </a></p>
         </div>
         <div class="line-yellow"></div>
     {% endfor %}
 
     <p class="total">Prix total : {{ totalPrice }}</p>
-    <div class="container-h"> 
-    <a class ="btn" href="{{ path('deleteAll') }}">Vider le panier</a>
+    <div class="container-h">
+        <a class="btn" href="{{ path('deleteAll') }}">Vider le panier</a>
 
-    <a class ="btn" href="{{ path("app_create") }}">Commander</a></div>
+        <a href="{{ path('deleteAll') }}">Vider le panier</a>
 
-   
-{% endblock %}
-
-
-{% block javascripts %}
-    <script>
-        window.onload = () => {
-            const add = document.querySelectorAll('.addProduct');
-            const substract = document.querySelectorAll('.substractProduct');
-            const total = document.querySelector('.basket');
-
-            const modifyQuantity = async (url, block, element) => {
-                const Url = new URL(window.location.href);
-                const api = await fetch(`${Url.origin}/${url}/${element.dataset.id}`, {
-                    headers: {
-                        "X-Requested-With" : "XMLHttpRequest"
-                    }
-                });
-                const quantities = await api.json();
-                const blockPrice = document.querySelector(`[data-id-price="${element.dataset.id}"]`)
-                document.querySelector(`[data-id-quantity="${element.dataset.id}"]`).innerHTML = quantities[element.dataset.id];
-                blockPrice.innerHTML = (parseInt(quantities[element.dataset.id]) * parseFloat(blockPrice.dataset.price)).toFixed(2);
-                if(quantities[element.dataset.id] === undefined) document.querySelector(`[data-id-block-product="${element.dataset.id}"]`).innerHTML = '';
-            }
-
-            add.forEach((element) => {
-                element.addEventListener("click", async (e) => {
-                    e.preventDefault();
-                    await modifyQuantity("buy", add, element);
-                    total.dataset.total = parseInt(total.dataset.total) + 1
-                    total.innerHTML = total.dataset.total
-                });
-            });
+        <a href="{{ path("order_app_create") }}">Commander</a>
+    </div>
+    {% endblock %}
 
 
-            substract.forEach((element) => {
-                element.addEventListener("click", async (e) => {
-                    e.preventDefault();
-                    await modifyQuantity("substract", substract, element);
-                    if(total.dataset.total > 0) {
-                        total.dataset.total = parseInt(total.dataset.total) - 1
+    {% block javascripts %}
+        <script>
+            window.onload = () => {
+                const add = document.querySelectorAll('.addProduct');
+                const substract = document.querySelectorAll('.substractProduct');
+                const total = document.querySelector('.basket');
+
+                const modifyQuantity = async (url, block, element) => {
+                    const Url = new URL(window.location.href);
+                    const api = await fetch(`${Url.origin}/${url}/${element.dataset.id}`, {
+                        headers: {
+                            "X-Requested-With": "XMLHttpRequest"
+                        }
+                    });
+                    const quantities = await api.json();
+                    const blockPrice = document.querySelector(`[data-id-price="${element.dataset.id}"]`)
+                    document.querySelector(`[data-id-quantity="${element.dataset.id}"]`).innerHTML = quantities[element.dataset.id];
+                    blockPrice.innerHTML = (parseInt(quantities[element.dataset.id]) * parseFloat(blockPrice.dataset.price)).toFixed(2);
+                    if (quantities[element.dataset.id] === undefined) document.querySelector(`[data-id-block-product="${element.dataset.id}"]`).innerHTML = '';
+                }
+
+                add.forEach((element) => {
+                    element.addEventListener("click", async (e) => {
+                        e.preventDefault();
+                        await modifyQuantity("buy", add, element);
+                        total.dataset.total = parseInt(total.dataset.total) + 1
                         total.innerHTML = total.dataset.total
-                    } else {
-
-                    }
+                    });
                 });
-            });
-        }
-    </script>
-{% endblock  %}
+
+
+                substract.forEach((element) => {
+                    element.addEventListener("click", async (e) => {
+                        e.preventDefault();
+                        await modifyQuantity("substract", substract, element);
+                        if (total.dataset.total > 0) {
+                            total.dataset.total = parseInt(total.dataset.total) - 1
+                            total.innerHTML = total.dataset.total
+                        } else {
+
+                        }
+                    });
+                });
+            }
+        </script>
+    {% endblock %}
