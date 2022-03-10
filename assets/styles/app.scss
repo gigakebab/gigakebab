@@ -1,6 +1,8 @@
 @import "./partial/header";
 @import "./partial/vars";
 @import "./partial/home";
+@import "./partial/connexion";
+@import "./partial/product";
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,200;0,300;0,400;1,100&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@400;600;700&display=swap");
 
@@ -16,4 +18,8 @@ body {
 }
 .mb-20 {
   margin-bottom: 20px;
+}
+
+a {
+  text-decoration: none;
 }
