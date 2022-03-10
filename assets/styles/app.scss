@@ -1,0 +1,19 @@
+@import "./partial/header";
+@import "./partial/vars";
+@import "./partial/home";
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,200;0,300;0,400;1,100&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@400;600;700&display=swap");
+
+body {
+  background-color: $color-lightGrey;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.mt-20 {
+  margin-top: 20px;
+}
+.mb-20 {
+  margin-bottom: 20px;
+}

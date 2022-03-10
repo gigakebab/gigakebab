@@ -1,0 +1,28 @@
+.image-card {
+  display: flex;
+  flex-direction: column;
+  width: 214px;
+  height: 198px;
+  background-color: aquamarine;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.container-h {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
+
+.title {
+  font-family: "Sansita Swashed", cursive;
+  font-weight: 600;
+  font-size: 35px;
+  color: $color-primary;
+}
