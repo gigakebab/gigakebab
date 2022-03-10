@@ -5,13 +5,15 @@
 {% block body %}
     <h1>Votre panier</h1>
     {% for product in products %}
-        <h2>{{ product.product.name }}</h2>
-        <h4>{{ product.product.price * product.quantity}}</h4>
-        <h4 class="quantityProduct" data-id-quantity="{{ product.product.id }}">{{ product.quantity}}</h4>
-{#        <p><a id="addProduct" href="{{ path("app_buy", {id:product.product.id}) }}">+</a></p>#}
-        <p class="addProduct" data-id="{{ product.product.id }}">+</p>
-        <p class="substractProduct" data-id="{{ product.product.id }}">-</p>
-        <p><a href="{{ path("app_erase", {id:product.product.id}) }}">Supprimer du panier</a></p>
+        <div data-id-block-product="{{ product.product.id }}">
+            <h2>{{ product.product.name }}</h2>
+            <h4 data-id-price="{{ product.product.id }}" data-price="{{ product.product.price }}">{{ product.product.price * product.quantity}}</h4>
+            <h4 class="quantityProduct" data-id-quantity="{{ product.product.id }}">{{ product.quantity}}</h4>
+            {#        <p><a id="addProduct" href="{{ path("app_buy", {id:product.product.id}) }}">+</a></p>#}
+            <p class="addProduct" data-id="{{ product.product.id }}">+</p>
+            <p class="substractProduct" data-id="{{ product.product.id }}">-</p>
+            <p><a href="{{ path("app_erase", {id:product.product.id}) }}">Supprimer du panier</a></p>
+        </div>
     {% endfor %}
 
     <p>Prix total : {{ totalPrice }}</p>
@@ -24,6 +26,7 @@
         window.onload = () => {
             const add = document.querySelectorAll('.addProduct');
             const substract = document.querySelectorAll('.substractProduct');
+            const total = document.querySelector('.basket');
 
             const modifyQuantity = async (url, block, element) => {
                 const Url = new URL(window.location.href);
@@ -33,13 +36,19 @@
                     }
                 });
                 const quantities = await api.json();
+                const blockPrice = document.querySelector(`[data-id-price="${element.dataset.id}"]`)
                 document.querySelector(`[data-id-quantity="${element.dataset.id}"]`).innerHTML = quantities[element.dataset.id];
+                blockPrice.innerHTML = (parseInt(quantities[element.dataset.id]) * parseFloat(blockPrice.dataset.price)).toFixed(2);
+                if(quantities[element.dataset.id] === undefined) document.querySelector(`[data-id-block-product="${element.dataset.id}"]`).innerHTML = '';
+
             }
 
             add.forEach((element) => {
                 element.addEventListener("click", async (e) => {
                     e.preventDefault();
                     await modifyQuantity("buy", add, element);
+                    total.dataset.total = parseInt(total.dataset.total) + 1
+                    total.innerHTML = total.dataset.total
                 });
             });
 
@@ -48,6 +57,12 @@
                 element.addEventListener("click", async (e) => {
                     e.preventDefault();
                     await modifyQuantity("substract", substract, element);
+                    if(total.dataset.total > 0) {
+                        total.dataset.total = parseInt(total.dataset.total) - 1
+                        total.innerHTML = total.dataset.total
+                    } else {
+
+                    }
                 });
             });
         }

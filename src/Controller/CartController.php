@@ -36,7 +36,6 @@ class CartController extends AbstractController
     public function buy(Product $product, SessionInterface $session, Request $request): Response
     {
         $cart = $session->get("cart");
-        $quantity = 1;
 
         !$cart ||!array_key_exists($product->getId(), $cart) ? $cart[$product->getId()] = 1 : $cart[$product->getId()] += 1 ;
 

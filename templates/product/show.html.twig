@@ -5,9 +5,36 @@
         {% for product in products  %}
             <div class="image-card">
                 <p><a href="{{ path('product_details',{id:product.id}) }}">{{ product.name }} : {{ product.price }}</a></p>
-                <p><a href="{{ path("app_buy", {id:product.id}) }}">Ajouter au panier</a></p>
+                <p><a class="addProduct" data-id="{{ product.id }}">Ajouter au panier</a></p>
             </div>
         {% endfor %}
     </div>
 </div>
+
+ {% block javascripts %}
+     <script>
+         window.onload = () => {
+             const add = document.querySelectorAll('.addProduct');
+             const total = document.querySelector('.basket');
+
+             const modifyQuantity = async (url, block, element) => {
+                 const Url = new URL(window.location.href);
+                 await fetch(`${Url.origin}/${url}/${element.dataset.id}`, {
+                     headers: {
+                         "X-Requested-With" : "XMLHttpRequest"
+                     }
+                 });
+                 total.dataset.total = parseInt(total.dataset.total) + 1
+                 total.innerHTML = total.dataset.total
+             }
+
+             add.forEach((element) => {
+                 element.addEventListener("click", async (e) => {
+                     e.preventDefault();
+                     await modifyQuantity("buy", add, element);
+                 });
+             });
+         }
+     </script>
+ {% endblock  %}
  
