@@ -26,10 +26,12 @@
     {% endfor %}
 
     <p class="total">Prix total : {{ totalPrice }}</p>
-
+    <div class="container-h"> 
     <a class ="btn" href="{{ path('deleteAll') }}">Vider le panier</a>
 
-    <a href="{{ path("app_create") }}">Commander</a>
+    <a class ="btn" href="{{ path("app_create") }}">Commander</a></div>
+
+   
 {% endblock %}
 
 
