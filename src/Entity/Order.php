@@ -36,7 +36,7 @@ class Order
     #[ORM\JoinColumn(nullable: false)]
     private $address;
 
-    #[ORM\OneToMany(mappedBy: 'order_product', targetEntity: ProductLine::class)]
+    #[ORM\OneToMany(mappedBy: 'order_product', targetEntity: ProductLine::class, orphanRemoval: true)]
     private $product_line;
 
     public function __construct()
