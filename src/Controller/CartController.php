@@ -33,7 +33,7 @@ class CartController extends AbstractController
     }
 
     #[Route('/buy/{id}', name: 'app_buy')]
-    public function buy(Product $product, SessionInterface $session, Request $request): Response
+    public function buy(Product $product, SessionInterface $session): Response
     {
         $cart = $session->get("cart");
 
@@ -43,7 +43,7 @@ class CartController extends AbstractController
     }
 
     #[Route('/substract/{id}', name: 'app_substract')]
-    public function substract(Product $product, SessionInterface $session, Request $request): Response
+    public function substract(Product $product, SessionInterface $session): Response
     {
         $cart = $session->get("cart");
         array_key_exists($product->getId(), $cart) && $cart[$product->getId()] -= 1 ;
