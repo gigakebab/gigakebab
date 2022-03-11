@@ -9,10 +9,11 @@
     <h3>Prix : {{ order.price }}</h3>
 
     <ul>
-        {% for line in order.productLine %}
-            <li>{{ line.product.name }} x {{ line.quantity }} : {{ line.price }} €</li>
+        {% for productLine in productLines %}
+            <li>{{ productLine.product.name }} x {{ productLine.quantity }} : {{ productLine.price }}€</li>
         {% endfor %}
     </ul>
 
     <a href="{{ path("app_home") }}">Retour à l'accueil</a>
+    <a href="{{ path("order_validate") }}">Valider</a>
 {% endblock %}

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Order;
 use App\Entity\ProductLine;
 use App\Repository\OrderRepository;
+use App\Repository\ProductLineRepository;
 use App\Repository\ProductRepository;
 use App\Repository\UserRepository;
 use DateTime;
@@ -26,7 +27,7 @@ use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 class OrderController extends AbstractController
 {
     #[Route('/create', name: 'app_create')]
-    public function create(SessionInterface $session, ProductRepository $repo, UserRepository $userRepo, EntityManagerInterface $manager, OrderRepository $orderRepo): Response
+    public function create(SessionInterface $session, ProductRepository $repo, UserRepository $userRepo, EntityManagerInterface $manager, OrderRepository $orderRepo, ProductLineRepository $productLineRepository): Response
     {
         if(!empty($session->get('order')) && $orderRepo->findOneBy(['id' => $session->get('order')])) {
             $order = $orderRepo->find($session->get('order'));
@@ -71,7 +72,8 @@ class OrderController extends AbstractController
         $session->set('order', $order->getId());
 
         return $this->render('order/index.html.twig', [
-            'order' => $order
+            'order' => $order,
+            'productLines' => $productLineRepository->findBy(['order_product' => $session->get('order')])
         ]);
     }
 
@@ -83,14 +85,15 @@ class OrderController extends AbstractController
      * @throws ApiErrorException
      * @throws Exception
      */
-    #[Route('/validate/{order}', name: 'validate')]
-    public function validate(Order $order, OrderRepository $repo, SessionInterface $session, TokenGeneratorInterface $token): Response
+    #[Route('/validate', name: 'validate')]
+    public function validate(OrderRepository $repo, SessionInterface $session, TokenGeneratorInterface $token): Response
     {
+        $order = $repo->find($session->get('order'));
         Stripe::setApiKey('sk_test_51Kc4G5JFPS7SAoqok30YmsBL9kWxLmlZrysv4AN0QrIkmqCSVdePlL7qelPuuK3A9br0dCcYhfkmlNKAF8IG1MtL00SnSOc0qu');
 
         $orderTab = [];
-
-        $session->set("token_payment", $token->generateToken());
+        $token = $token->generateToken();
+        $session->set("token_payment", $token);
 
         foreach ($order->getProductLine() as $line) {
             $orderTab[] =
