@@ -19,12 +19,13 @@ class OrderController extends AbstractController
     #[Route('/create', name: 'app_create')]
     public function create(SessionInterface $session, ProductRepository $repo, UserRepository $userRepo, EntityManagerInterface $manager): Response
     {
+
         $cart = $session->get("cart");
 
         $order = new Order();
 
         $user = $userRepo->find($this->getUser());
-
+        dd($user->getAddresses());
         $totalPrice = 0;
 
         $order->setUser($user)
@@ -32,6 +33,8 @@ class OrderController extends AbstractController
               ->setStatus(false)
               ->setDeliveryAt(new DateTime())
               ->setOderAt(new DateTime());
+
+
 
         foreach ($cart as $productId => $quantity){
             $productLine = new ProductLine();
