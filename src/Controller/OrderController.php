@@ -27,7 +27,7 @@ class OrderController extends AbstractController
         $order = new Order();
 
         $user = $userRepo->find($this->getUser());
-        dd($user->getAddresses());
+
         $totalPrice = 0;
 
         $order->setUser($user)
